@@ -35,6 +35,6 @@ ENV KCP_PARITYSHARD 0
 
 EXPOSE $SS_PORT/tcp $SS_PORT/udp $KCP_PORT/udp
 
-COPY entrypoint.sh /bin/ss-entrypoint
-RUN chmod +x /bin/ss-entrypoint
-ENTRYPOINT ["ss-entrypoint"]
+COPY entrypoint /bin/entrypoint
+RUN chmod +x /bin/entrypoint
+ENTRYPOINT ["entrypoint"]

@@ -34,5 +34,8 @@ done
 KCP_EXEC=$KCP_EXEC" --crypt none --nocomp --mode $KCP_MODE --mtu $KCP_MTU --sndwnd $KCP_SNDWND --rcvwnd $KCP_RCVWND --datashard $KCP_DATASHARD --parityshard $KCP_PARITYSHARD"
 SSS_EXEC=$SSS_EXEC" -p $SS_PORT -k $SS_PASSWORD -m $SS_METHOD -t $SS_TIMEOUT -u -A --fast-open"
 
-$KCP && echo "Start:" $KCP_EXEC && $KCP_EXEC&
-echo "Start:" $SSS_EXEC && $SSS_EXEC
+$KCP && echo "Start:" $KCP_EXEC && $KCP_EXEC& pid_kcp=$!
+echo "Start:" $SSS_EXEC && $SSS_EXEC& pid_sss=$!
+
+trap "kill -9 $pid_kcp $pid_sss; exit 0" SIGTERM SIGINT
+wait $pid_kcp $pid_sss

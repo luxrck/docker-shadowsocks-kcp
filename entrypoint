@@ -45,5 +45,4 @@ if [[ $PORT != 0 && $CLIENT == true ]]; then
 	privoxy --no-daemon /etc/privoxy/config &
 fi
 
-trap "pkill -P $$; exit 0" SIGTERM SIGINT
-wait $(jobs -p)
+trap "pkill -P $$; exit 0" TERM INT CHLD; wait

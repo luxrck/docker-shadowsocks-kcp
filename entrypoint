@@ -1,6 +1,8 @@
 #!/bin/sh -e
 
 KCP=true
+CLIENT=false
+
 KCP_EXEC="/opt/kcptun/server_linux_amd64 -t 0.0.0.0:$SS_PORT -l :$KCP_PORT"
 SSS_EXEC="/usr/local/bin/ss-server"
 
@@ -23,7 +25,7 @@ while true; do
 		-c|--client)
 			KCP_EXEC="/opt/kcptun/client_linux_amd64 -r $SS_SERVER:$KCP_PORT -l :$SS_PORT"
 			SSS_EXEC="/usr/local/bin/ss-local -b 0.0.0.0 -l $SS_LOCAL_PORT -s $SS_SERVER"
-			shift ;;
+			CLIENT=true; shift ;;
 		--no-kcp) KCP=false; shift ;;
 		--help) usage; exit 0 ;;
 		--) shift; break ;;
@@ -34,8 +36,14 @@ done
 KCP_EXEC=$KCP_EXEC" --crypt none --nocomp --mode $KCP_MODE --mtu $KCP_MTU --sndwnd $KCP_SNDWND --rcvwnd $KCP_RCVWND --datashard $KCP_DATASHARD --parityshard $KCP_PARITYSHARD"
 SSS_EXEC=$SSS_EXEC" -p $SS_PORT -k $SS_PASSWORD -m $SS_METHOD -t $SS_TIMEOUT -u -A --fast-open"
 
-$KCP && echo "Start:" $KCP_EXEC && $KCP_EXEC& pid_kcp=$!
-echo "Start:" $SSS_EXEC && $SSS_EXEC& pid_sss=$!
+$KCP && echo "Start:" $KCP_EXEC && $KCP_EXEC&
+echo "Start:" $SSS_EXEC && $SSS_EXEC&
 
-trap "kill -9 $pid_kcp $pid_sss; exit 0" SIGTERM SIGINT
-wait $pid_kcp $pid_sss
+if [[ $PORT != 0 && $CLIENT == true ]]; then
+	sed -i "/^\s*listen-address/c\listen-address 0.0.0.0:$PORT" /etc/privoxy/config
+	echo forward-socks5 / 127.0.0.1:$SS_LOCAL_PORT . >> /etc/privoxy/config
+	privoxy --no-daemon /etc/privoxy/config &
+fi
+
+trap "pkill -P $$; exit 0" SIGTERM SIGINT
+wait $(jobs -p)

@@ -12,11 +12,14 @@ ENV KCP_URL https://github.com/xtaci/kcptun/releases/download/v$KCP_VER/kcptun-l
 RUN apk add --no-cache --virtual .build-deps \
       autoconf build-base curl libtool linux-headers openssl-dev pcre-dev xmlto asciidoc  \
     && apk add --no-cache --virtual .runtime-deps \
-      pcre \
+      pcre privoxy \
     && curl -sSL $SS_URL | tar xz \
     && cd $SS_DIR && ./configure && make install && cd .. && rm -rf $SS_DIR \
     && mkdir -p /opt/kcptun && cd /opt/kcptun && curl -sSL $KCP_URL | tar xz \
     && apk del .build-deps
+
+# set to an non-zero value to enable privoxy http proxy.
+ENV PORT          0
 
 ENV SS_PORT       10800
 ENV SS_LOCAL_PORT 1080

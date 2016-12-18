@@ -13,6 +13,13 @@ To start shadowsocks, run `$ docker run -d -p10800:10800 -p10800:10800/udp -p900
 #### Eironments
 Change these environments list below to apply new settings.
 
+##### privoxy
+Set `PORT` to an non-zero value to enable privoxy http proxy (only avaliable in client mode).
+
+Env.         | Val.
+-------------|--------
+PORT         | 0
+
 ##### shadowsocks-libev
 Shadowsocks with `-u (udp relay)`, `-A (onetime authentication)`, `--fast-open (tcp fast-open)` enabled.
 

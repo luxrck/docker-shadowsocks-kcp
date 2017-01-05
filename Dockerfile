@@ -6,13 +6,13 @@ ENV SS_VER 2.5.6
 ENV SS_URL https://github.com/shadowsocks/shadowsocks-libev/archive/v$SS_VER.tar.gz
 ENV SS_DIR shadowsocks-libev-$SS_VER
 
-ENV KCP_VER 20161118
+ENV KCP_VER 20161222
 ENV KCP_URL https://github.com/xtaci/kcptun/releases/download/v$KCP_VER/kcptun-linux-amd64-$KCP_VER.tar.gz
 
 RUN apk add --no-cache --virtual .build-deps \
       autoconf build-base curl libtool linux-headers openssl-dev pcre-dev xmlto asciidoc  \
     && apk add --no-cache --virtual .runtime-deps \
-      pcre privoxy \
+      pcre libcrypto1.0 privoxy \
     && curl -sSL $SS_URL | tar xz \
     && cd $SS_DIR && ./configure && make install && cd .. && rm -rf $SS_DIR \
     && mkdir -p /opt/kcptun && cd /opt/kcptun && curl -sSL $KCP_URL | tar xz \

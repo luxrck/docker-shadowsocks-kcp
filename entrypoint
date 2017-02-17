@@ -2,6 +2,7 @@
 
 KCP=true
 CLIENT=false
+SS_REMOTE=$SS_SERVER
 
 KCP_EXEC="/opt/kcptun/server_linux_amd64 -t 0.0.0.0:$SS_PORT -l :$KCP_PORT"
 SSS_EXEC="/usr/local/bin/ss-server"
@@ -26,7 +27,7 @@ while true; do
 			KCP_EXEC="/opt/kcptun/client_linux_amd64 -r $SS_SERVER:$KCP_PORT -l :$SS_PORT"
 			SSS_EXEC="/usr/local/bin/ss-local -b 0.0.0.0 -l $SS_LOCAL_PORT"
 			SS_SERVER=127.0.0.1; CLIENT=true; shift ;;
-		--no-kcp) KCP=false; shift ;;
+		--no-kcp) KCP=false; SS_SERVER=$SS_REMOTE; shift ;;
 		--help) usage; exit 0 ;;
 		--) shift; break ;;
 		*) echo "Invalid arguments."; exit 1 ;;

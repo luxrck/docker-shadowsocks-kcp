@@ -35,7 +35,7 @@ while true; do
 done
 
 KCP_EXEC=$KCP_EXEC" --crypt none --nocomp --mode $KCP_MODE --mtu $KCP_MTU --sndwnd $KCP_SNDWND --rcvwnd $KCP_RCVWND --datashard $KCP_DATASHARD --parityshard $KCP_PARITYSHARD"
-SSS_EXEC=$SSS_EXEC" -s $SS_SERVER -p $SS_PORT -k $SS_PASSWORD -m $SS_METHOD -t $SS_TIMEOUT -u -A --fast-open"
+SSS_EXEC=$SSS_EXEC" -s $SS_SERVER -p $SS_PORT -k $SS_PASSWORD -m $SS_METHOD -t $SS_TIMEOUT -u --fast-open"
 
 $KCP && echo "Start:" $KCP_EXEC && $KCP_EXEC&
 echo "Start:" $SSS_EXEC && $SSS_EXEC&
@@ -46,4 +46,4 @@ if [[ $PORT != 0 && $CLIENT == true ]]; then
 	privoxy --no-daemon /etc/privoxy/config &
 fi
 
-trap "pkill -P $$; exit 0" TERM INT CHLD; wait
+trap "pkill -P $$; exit 0" TERM INT; wait

@@ -21,7 +21,7 @@ Env.         | Val.
 PORT         | 0
 
 ##### shadowsocks-libev
-Shadowsocks with `-u (udp relay)`, `-A (onetime authentication)`, `--fast-open (tcp fast-open)` enabled.
+Shadowsocks with `-u (udp relay)`, `--fast-open (tcp fast-open)` enabled.
 
 Env.         | Val.
 -------------|--------
@@ -33,6 +33,7 @@ SS_TIMEOUT   |600
 SS_SERVER    |0.0.0.0
 
 ##### kcptun
+kcptun with `--crypt none`, `--nocomp` enabled.
 Make sure to change client's command line arguments if you change these.
 
 Env.           | Val.

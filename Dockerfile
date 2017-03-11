@@ -2,26 +2,21 @@
 
 FROM alpine:latest
 
-ENV SS_VER 3.0.2
+ENV SS_VER 3.0.3
 ENV SS_URL https://github.com/shadowsocks/shadowsocks-libev/releases/download/v$SS_VER/shadowsocks-libev-$SS_VER.tar.gz
 ENV SS_DIR shadowsocks-libev-$SS_VER
 
-ENV KCP_VER 20170217
+ENV KCP_VER 20170310
 ENV KCP_URL https://github.com/xtaci/kcptun/releases/download/v$KCP_VER/kcptun-linux-amd64-$KCP_VER.tar.gz
 
 RUN apk add --no-cache --virtual .build-deps \
-      autoconf build-base curl libtool linux-headers xmlto asciidoc \
-      libev-dev libsodium-dev openssl-dev pcre-dev mbedtls-dev udns-dev \
+      autoconf build-base libtool linux-headers xmlto asciidoc curl \
+      libev-dev libsodium-dev pcre-dev mbedtls-dev udns-dev openssl-dev \
     && curl -sSL $SS_URL | tar xz \
     && cd $SS_DIR && ./configure && make install && cd .. && rm -rf $SS_DIR \
+    && apk add --no-cache --virtual .run-deps \
+      libev libsodium pcre mbedtls udns privoxy \
     && mkdir -p /opt/kcptun && cd /opt/kcptun && curl -sSL $KCP_URL | tar xz \
-    && runDeps="$( \
-        scanelf --needed --nobanner /usr/local/bin/ss-* \
-            | awk '{ gsub(/,/, "\nso:", $2); print "so:" $2 }' \
-            | xargs -r apk info --installed \
-            | sort -u \
-    )" \
-    && apk add --no-cache --virtual .run-deps $runDeps privoxy \
     && apk del .build-deps
 
 # set to an non-zero value to enable privoxy http proxy.

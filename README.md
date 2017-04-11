@@ -1,6 +1,9 @@
 #### Quick Start
 To start shadowsocks, run `$ docker run -d -p10800:10800 -p10800:10800/udp -p9000:9000/udp luxrck/shadowsocks-kcp`, this will start shadowsocs at `port:10800` with kcptun at `port:9000` in server mode. Use `--crypt none --mode fast --mtu 1400 --sndwnd 1024 --rcvwnd 1024 --parityshard 0 --nocomp` as the command line arguments of your kcptun client.
 
+#### Enable `BBR congestion control algorithm`
+For one use kernel version `>= 4.9`, should enable `TCP_CONG_BBR` in your host os in order to get a better network performance (especially in high packet-loss situation).
+
 #### Usage
 `$ docker run -it --rm luxrck/shadowsocks-kcp --help`
 

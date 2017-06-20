@@ -29,6 +29,7 @@ ENV SS_METHOD     chacha20
 ENV SS_TIMEOUT    600
 ENV SS_SERVER     0.0.0.0
 
+ENV KCP_TARGET      0.0.0.0
 ENV KCP_PORT        9000
 ENV KCP_MODE        fast
 ENV KCP_MTU         1400

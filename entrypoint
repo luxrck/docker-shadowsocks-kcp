@@ -4,7 +4,7 @@ KCP=true
 CLIENT=false
 SS_REMOTE=$SS_SERVER
 
-KCP_EXEC="/opt/kcptun/server_linux_amd64 -t 0.0.0.0:$SS_PORT -l :$KCP_PORT"
+KCP_EXEC="/opt/kcptun/server_linux_amd64 -t $KCP_TARGET:$SS_PORT -l :$KCP_PORT"
 SSS_EXEC="/usr/local/bin/ss-server"
 
 ARGS=`getopt -o c --long client,no-kcp,help -- "$@"` && eval set -- "$ARGS"

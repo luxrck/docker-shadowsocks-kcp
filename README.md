@@ -13,7 +13,7 @@ For one use kernel version `>= 4.9`, should enable `TCP_CONG_BBR` in your host o
 		-c|--client    start in client mode
 		--no-kcp       disable kcptun
 
-#### Eironments
+#### Environments
 Change these environments list below to apply new settings.
 
 ##### privoxy
